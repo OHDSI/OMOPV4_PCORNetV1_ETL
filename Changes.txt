@@ -1,0 +1,33 @@
+Changes in R3.1
+
+- Populate BP position
+- Change Encounter query to use omop.concept table instead of observation source value.  
+- Use correct observation concept id for “Discharge disposition”
+
+Changes in R2
+
+SQL scripts:
+
+- Change “::” operator to cast function
+- Change value_as_concept column name to value_as_concept_id
+- Change source_concept_id, value_as_concept_id to integer
+- Change location, care_site joins to LEFT joins
+- Add logic to process DRG and DRG_TYPE
+- More complete Visit occurrence -> encounter query: Add DRG, DRG_TYPE, ADMITTING SOURCE… mappings
+- Convert observation date to text
+- Add leading 0 to single digit dates
+- Account for cases in which birth month or birth day is null in the demographic query
+- Change concept id for diastolic BP from 3009395 to 3012888
+
+omop_pcornet_mappings file:
+
+- Updated with Rimma’s latest mappings
+- Fix the auto-incremental error
+- Add Hispanic no information
+- Change source_concept_class from “Sex” to “Gender” 
+
+Unresolved issues:
+- Vital table: Observations recored on the same day
+- Incorrect observation concept id for “Discharge disposition”
+- vital: Source of reporting
+- BP position
