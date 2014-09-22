@@ -26,7 +26,7 @@ omop_pcornet_mappings file:
 - Add Hispanic no information
 - Change source_concept_class from “Sex” to “Gender” 
 
-Unresolved issues:
+Unresolved issues in R2:
 - Vital table: Observations recored on the same day
 - Incorrect observation concept id for “Discharge disposition”
 - vital: Source of reporting
