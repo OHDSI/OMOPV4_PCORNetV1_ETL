@@ -15,6 +15,9 @@ This document describes all the assumptions made for the transformation process.
 ###cz_omop_pcornet_concept_map_ddl.txt
 This document contains the DDL script to load the source-to-concept mapping table (i.e. OMOP->PCORnet vocabulary mapping) into database
 
+###pcornet_schema_ddl.sql
+This is the script to generate the pcornet schema in a PostgreSQL database. Important: running this script will permanently erase all data in the existing pcornet schema
+
 ###OMOP-PCORNet r3.3.sql
 This file contains the complete ETL source code, i.e. table-wise SQL queries to extract the PCORnet instance from a given OMOP instance and the source-to-concept mapping table 
 
