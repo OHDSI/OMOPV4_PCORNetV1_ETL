@@ -1,0 +1,22 @@
+OMOPV4_PCORNetV1_ETL
+====================
+
+This repository contains the documentation and source code to transform an instance of OMOP CDMv 4 to an instance of PCORnet v1
+
+### OMOPv4 to PCORnetv1 ETL Description 22-Sep-14.docx
+This document describes the ETL process to populate each field of the PCORnet model. 
+
+### omop_pcornet_mappings.csv
+This document mappings from OMOP vocabulary to PCORnet vocabulary 
+
+### ASSUMPTIONS.docx
+This document describes all the assumptions made for the transformation process. 
+
+###cz_omop_pcornet_concept_map_ddl.txt
+This document contains the DDL script to load the source-to-concept mapping table (i.e. OMOP->PCORnet vocabulary mapping) into database
+
+###OMOP-PCORNet r3.3.sql
+This file contains the complete ETL source code, i.e. table-wise SQL queries to extract the PCORnet instance from a given OMOP instance and the source-to-concept mapping table 
+
+###Changes.txt
+This document describes changes made to each version of the repository
