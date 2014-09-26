@@ -6,11 +6,11 @@ This repository contains the documentation and source code to transform an insta
 ### omop_pcornet_mappings.csv
 This document mappings from OMOP vocabulary to PCORnet vocabulary 
 
-### OMOPv4 to PCORnetv1 ETL Description 22-Sep-14.docx
-This document describes the ETL process to populate each field of the PCORnet model. 
-
 ### ASSUMPTIONS.docx
 This document describes all the assumptions made for the transformation process. 
+
+### OMOPv4 to PCORnetv1 ETL Description 22-Sep-14.docx
+This document describes the ETL process to populate each field of the PCORnet model. 
 
 ### cz_omop_pcornet_concept_map_ddl.txt
 This document contains the DDL script to load the source-to-concept mapping table (i.e. OMOP->PCORnet vocabulary mapping) into database
