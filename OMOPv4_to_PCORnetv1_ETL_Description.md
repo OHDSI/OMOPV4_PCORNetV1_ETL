@@ -30,3 +30,97 @@ RAW_SEX|	person|	gender_source_value||||
 RAW_HISPANIC|	person	|ethnicity_source_value||||				
 RAW_RACE|	person|	race_source_value		||||		
 
+<h1>PCORnet Table: ENCOUNTER </h1>
+Reading from: OMOP tables, Visit_Occurrence, Person, Location, Observation, Concept 
+
+Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
+------------ | -------------|-------------|-------------|-------------|-------------|-------------
+PATID|	Visit_occurrence|	person_id	||||			
+ENCOUNTERID|	Visit_occurrence|	visit_occurrence_id||||				
+ADMIT_DATE|	Visit_occurrence|	visit_start_date||||				
+ADMIT_TIME|	||||||					
+DISCHARGE_DATE|	Visit_occurrence|	visit_end_date	||||			
+DISCHARGE_TIME|	||||||					
+PROVIDERID|	Person|	provider_id	|	|||		Visit_occurrence and Person
+FACILITY_LOCATION|	Location|	Zip	|	|||		Visit_occurrence and Care_Site, Care_Site and Location
+ENC_TYPE|	Visit_occurrence|	Place_of_service_concept_id	||	‘Encounter_type’|	|	Visit_occurrence and source-to-concept mapping table (1st instance)
+FACILITY_ID	|Visit_occurrence	|care_site_id		||||		
+DISCHARGE_DISPOSITION	|Observation (1st instance)|	value_as_concept_id	|	|‘Discharge Disposition’	|44813951	|Visit_occurrence and Observation (1st instance), Observation (1st instance) and source-to-concept mapping table  (2nd instance)
+DISCHARGE_STATUS|	Observation(2nd instance)|	value_as_concept_id	|	|‘Discharge Status’	|4137274|	Visit_occurrence and Observation (2nd instance), Observation (2nd instance) and source-to-concept mapping table  (3rd instance)
+DRG|	Concept|	Concept_code|	||		3040646	|Visit_occurrence and Observation (3rd  instance), Observation (3rd instance) and Concept
+DRG_TYPE|	||		Corresponds to the field DRG; ‘01’ if concept_class is ‘DRG’, else ‘02’	|||		
+ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	|	|'Admitting source'|	4145666	|Visit_occurrence and Observation (4th instance), Observation (4th instance) and source-to-concept mapping table  (4th instance)
+RAW_ENC_TYPE|	Visit_occurrence|	place_of_service_concept_id|	Corresponds to the field DISCHARGE_DISPOSITION|||			
+RAW_DISCHARGE_DISPOSITION|	Observation (1st instance)|	value_as_concept_id	|Corresponds to the field DISCHARGE_STATUS|||			
+RAW_DISCHARGE_STATUS|	Observation (2nd instance)|	value_as_concept_id|	Corresponds to the field DRG_TYPE	|||		
+RAW_DRG_TYPE|||			Corresponds to the field ADMITTING_SOURCE	|||		
+RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	||||			
+
+<h1>PCORnet Table: ENROLLMENT </h1>
+Reading from OMOP tables: Payer_plan_period, and Observation
+
+Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
+------------ | -------------|-------------|-------------|-------------|-------------|-------------
+PATID| 	Payer_plan_period	| person_id| | | | 				
+ENR_START_DATE| 	Payer_plan_period	| Payer_plan_period_start_date| | | | 				
+ENR_END_DATE| 	Payer_plan_period	| Payer_plan_period_end_date| 		| | | 		
+CHART| 	Observation	| value_as_concept_id	| 	| 'Chart availability'	| 4030450	| Payer_plan_period and Observation, Observation and source-to-concept mapping table  
+BASIS	| | | 		Hardcore to ‘I’ (insurance)	| | | 		
+
+<h1>PCORnet Table: DIAGNOSIS </h1>
+Reading from OMOP tables: Condition_occurrence, and PCORnet table/view ENCOUNTER 
+
+Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
+------------ | -------------|-------------|-------------|-------------|-------------|-------------
+PATID|	Condition_occurrence	|Person_id|	|||
+ENCOUNTERID	|Condition_occurrence	|Visit_occurrence_id	||||
+ENC_TYPE|	ENCOUNTER	|ENC_TYPE	||||
+ADMIT_DATE|	ENCOUNTER|	ADMIT_DATE	||||
+PROVIDERID|	ENCOUNTER	|PROVIDERID	||||
+DX	|Condition_occurrence|	condition_concept_id	||||
+DX_TYPE	|	||	Hardcore to ‘SM’ (SNOMED-CT)|||
+DX_SOURCE|	||||||		
+PDX		|	||||||	
+RAW_DX|			||||||	
+RAW_DX_TYPE|			||||||	
+RAW_DX_SOURCE	|		||||||	
+RAW_PDX	|		||||||	
+
+<h1>PCORnet Table: PROCEDURE </h1>
+Reading from OMOP tables: Procedure_occurrence, and PCORnet table/view ENCOUNTER 
+
+Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
+------------ | -------------|-------------|-------------|-------------|-------------|-------------
+PATID|	Procedure_occurrence	|Person_id|	|||
+ENCOUNTERID	|Procedure_occurrence	|Visit_occurrence_id	||||
+ENC_TYPE|	ENCOUNTER	|ENC_TYPE	||||
+ADMIT_DATE|	ENCOUNTER|	ADMIT_DATE	||||
+PROVIDERID|	ENCOUNTER	|PROVIDERID	||||
+PX	|Procedure_Occurrence|	procedure_concept_id	||||
+PX_TYPE	|	||	Hardcore to ‘SM’ (SNOMED-CT)|||
+RAW_PX|		||||||	
+RAW_PX_TYPE	|		||||||	
+
+<h1>PCORnet Table: VITAL </h1>
+Reading from OMOP table: Observation  
+
+Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
+------------ | -------------|-------------|-------------|-------------|-------------|-------------
+PATID	|Observation (1st instance)|	Person_id	|||||			
+ENCOUNTERID|	Observation (1st instance)|	Visit_occurrence_id		||||		
+MEASURE_DATE|	Observation (1st instance)|	Observation_date||||				
+MEASURE_TIME|	Observation (1st instance)|	Observation_time		||||		
+VITAL_SOURCE|		||||||				
+HT|	Observation (2nd instance)	|	Value_as_number		|		|		|3036277	|	Observation (1st instance) and Observation (2nd instance)
+WT|	Observation (3rd instance)	|	Value_as_number		|		|	|	3025315		|Observation (1st instance) and Observation (3rd instance)
+ORIGINAL_BMI|	Observation (4th instance)	|	Value_as_number		|	|		|	3038553	|	Observation (1st instance) and Observation (4th  instance)
+DIASTOLIC|	Observation (5th instance)	|	Value_as_number	|			|	|	3012888		|Observation (1st instance) and Observation (5th instance)
+SYSTOLIC|	Observation (6th instance)	|	Value_as_number			|		|	|3004249	|	Observation (1st instance) and Observation (6th instance)
+BP_POSITION|	Observation (7th instance)	|	Target_concept		|	|	‘BP Position’	|	|		Observation (1st instance) and Observation (7th instance), Observation (7th instance) 	and source-to-concept-mapping table
+RAW_VITAL_SOURCE|||||||					
+RAW_DIASTOLIC						|||||||					
+RAW_SYSTOLIC		|||||||					
+RAW_BP_POSITION	|||||||					
+
+
+
