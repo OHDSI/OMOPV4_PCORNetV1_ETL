@@ -4,7 +4,7 @@ OMOPV4_PCORNetV1_ETL
 This repository contains the documentation and source code to transform an instance of OMOP CDMv 4 to an instance of PCORnet v1
 
 ### omop_pcornet_mappings.csv
-This document mappings from OMOP vocabulary to PCORnet vocabulary 
+This document contains the mappings from OMOP vocabulary to PCORnet vocabulary 
 
 ### ASSUMPTIONS.docx
 This document describes all the assumptions made for the transformation process. 
