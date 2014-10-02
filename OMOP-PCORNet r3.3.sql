@@ -42,14 +42,14 @@ from
 -- Observation_period -> Enrollment
 
 select distinct 
-	cast(ppp.person_id as text) as pat_id,
+	cast(op.person_id as text) as pat_id,
 	cast(date_part('year', observation_period_start_date) as text)||'-'||lpad(cast(date_part('month', observation_period_start_date) as text),2,'0')||'-'||lpad(cast(date_part('day', observation_period_start_date) as text),2,'0') as enr_start_date,
 	cast(date_part('year', observation_period_end_date) as text)||'-'||lpad(cast(date_part('month', observation_period_end_date) as text),2,'0')||'-'||lpad(cast(date_part('day', observation_period_end_date) as text),2,'0') as enr_end_date,
 	coalesce(m1.target_concept,'OT') as chart_avaiability,
 	'E' as ENR_basis
 from
-	omop.observation_period ppp
-	left join omop.observation o on ppp.person_id = o.person_id and observation_concept_id = 4030450
+	omop.observation_period op
+	left join omop.observation o on op.person_id = o.person_id and observation_concept_id = 4030450
 	left join cz.cz_omop_pcornet_concept_map m1 on case when o.value_as_concept_id is null AND m1.value_as_concept_id is null then true else o.value_as_concept_id = m1.value_as_concept_id end and m1.source_concept_class = 'Chart availability'
 
 -- Visit occurrence -> encounter
