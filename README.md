@@ -1,7 +1,7 @@
-OMOPV4_PCORNetV1_ETL
-====================
+(The ETL repository for OMOP CDM V4 to PCORnet CDM V1 tranformation)
+===============================================================================
 
-This repository contains the documentation and source code to transform an instance of OMOP CDMv 4 to an instance of PCORnet v1
+This repository contains the documentation and source code to transform an instance of OMOP CDM v4 to an instance of PCORnet CDM v1. The documentation and source code (in PostgreSQL) are designed for the PEDSnet project but may also be useful for other CDRNs. 
 
 ### omop_pcornet_mappings.csv
 This document contains the mappings from OMOP vocabulary to PCORnet vocabulary 
@@ -9,7 +9,7 @@ This document contains the mappings from OMOP vocabulary to PCORnet vocabulary
 ### ASSUMPTIONS.docx
 This document describes all the assumptions made for the transformation process. 
 
-### OMOPv4 to PCORnetv1 ETL Description 22-Sep-14.docx
+### OMOPv4_to_PCORnetv1_ETL_Description.md
 This document describes the ETL process to populate each field of the PCORnet model. 
 
 ### cz_omop_pcornet_concept_map_ddl.txt
