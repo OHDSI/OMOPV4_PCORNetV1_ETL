@@ -58,6 +58,7 @@ RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	||||
 
 <h1>PCORnet Table: ENROLLMENT </h1>
 Reading from OMOP tables: Observation_period, and Observation
+
 **Assumptions:** *We assume that the enrollment information is encounter-based ('E') and hence we use the observation_period table to determine the enrollment duration of a patient. For sites that have the insurance information must use the payer_plan_period table instead and set the BASIS field to 'I', i.e. insurance-based.* 
 
 Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
