@@ -1,6 +1,7 @@
 ﻿
 
 -- Person -> Demographic WITHOUT Biobank_flag
+insert into pcornet.demographic
 select distinct 
 	cast(p.person_id as text) as pat_id,
 	cast(year_of_birth as text)||(case when month_of_birth is null OR day_of_birth is null then '' else '-'||lpad(cast(month_of_birth as text),2,'0')||'-'||lpad(cast(day_of_birth as text),2,'0') end) as birth_date,	
@@ -19,7 +20,7 @@ from
 	left join cz.cz_omop_pcornet_concept_map m3 on case when p.race_concept_id is null AND m3.source_concept_id is null then true else p.race_concept_id = m3.source_concept_id end and m3.source_concept_class = 'Race';
 
 -- Person -> Demographic WITH Biobank_flag
-
+insert into pcornet.demographic
 select distinct 
 	cast(p.person_id as text) as pat_id,
 	cast(year_of_birth as text)||(case when month_of_birth is null OR day_of_birth is null then '' else '-'||lpad(cast(month_of_birth as text),2,'0')||'-'||lpad(cast(day_of_birth as text),2,'0') end) as birth_date,	
@@ -40,7 +41,7 @@ from
 	left join cz.cz_omop_pcornet_concept_map m4 on case when o.value_as_concept_id is null AND m4.value_as_concept_id is null then true else o.value_as_concept_id=m4.value_as_concept_id end and m4.source_concept_class = 'Biobank flag'
 
 -- Observation_period -> Enrollment
-
+insert into pcornet.enrollment
 select distinct 
 	cast(op.person_id as text) as pat_id,
 	cast(date_part('year', observation_period_start_date) as text)||'-'||lpad(cast(date_part('month', observation_period_start_date) as text),2,'0')||'-'||lpad(cast(date_part('day', observation_period_start_date) as text),2,'0') as enr_start_date,
@@ -53,6 +54,7 @@ from
 	left join cz.cz_omop_pcornet_concept_map m1 on case when o.value_as_concept_id is null AND m1.value_as_concept_id is null then true else o.value_as_concept_id = m1.value_as_concept_id end and m1.source_concept_class = 'Chart availability'
 
 -- Visit occurrence -> encounter
+insert into pcornet.encounter
 select distinct 
 	cast(v.person_id as text) as pat_id,
 	cast(v.visit_occurrence_id as text) as encounterid,
@@ -92,7 +94,7 @@ from
 	left join cz.cz_omop_pcornet_concept_map m4 on case when o4.value_as_concept_id is null AND m4.value_as_concept_id is null then true else o4.value_as_concept_id = m4.value_as_concept_id end and m4.source_concept_class='Admitting source'
 
 -- condition_occurrence --> Diagnosis
-
+insert into pcornet.diagnosis
 select distinct 
 	cast(person_id as text) as patid,
 	cast(visit_occurrence_id as text) encounterid,
@@ -112,7 +114,7 @@ from
 	join pcornet.encounter enc on cast(co.visit_occurrence_id as text)=enc.encounterid; 
 
 -- procedure_occurrence -> procedure
-
+insert into pcornet.procedure
 select distinct 
 	cast(person_id as text) as patid,
 	cast(visit_occurrence_id as text) as encounterid,
@@ -128,7 +130,7 @@ from
 	join pcornet.encounter enc on cast(po.visit_occurrence_id as text)=enc.encounterid;
 
 -- observation --> vital WITHOUT Observation time
-
+insert into pcornet.vital
 select distinct 
 	cast(ob.person_id as text) as patid,
 	cast(ob.visit_occurrence_id as text) as encounterid,
@@ -165,7 +167,7 @@ from
 
 
 -- observation --> vital WITH Observation time
-
+insert into pcornet.vital
 select distinct 
 	cast(ob.person_id as text) as patid,
 	cast(ob.visit_occurrence_id as text) as encounterid,
