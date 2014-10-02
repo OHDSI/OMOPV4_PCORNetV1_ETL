@@ -57,15 +57,16 @@ RAW_DRG_TYPE|||			Corresponds to the field ADMITTING_SOURCE	|||
 RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	||||			
 
 <h1>PCORnet Table: ENROLLMENT </h1>
-Reading from OMOP tables: Payer_plan_period, and Observation
+Reading from OMOP tables: Observation_period, and Observation
+**Assumptions:** *We assume that the enrollment information is encounter-based ('E') and hence we use the observation_period table to determine the enrollment duration of a patient. For sites that have the insurance information must use the payer_plan_period table instead and set the BASIS field to 'I', i.e. insurance-based.* 
 
 Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
 ------------ | -------------|-------------|-------------|-------------|-------------|-------------
-PATID| 	Payer_plan_period	| person_id| | | | 				
-ENR_START_DATE| 	Payer_plan_period	| Payer_plan_period_start_date| | | | 				
-ENR_END_DATE| 	Payer_plan_period	| Payer_plan_period_end_date| 		| | | 		
-CHART| 	Observation	| value_as_concept_id	| 	| 'Chart availability'	| 4030450	| Payer_plan_period and Observation, Observation and source-to-concept mapping table  
-BASIS	| | | 		Hardcore to ‘I’ (insurance)	| | | 		
+PATID| 	Observation_period	| person_id| | | | 				
+ENR_START_DATE| 	Observation_period	| observation_period_start_date| | | | 				
+ENR_END_DATE| 	Observation_period	| observation_period_end_date| 		| | | 		
+CHART| 	Observation	| value_as_concept_id	| 	| 'Chart availability'	| 4030450	| Observation_period and Observation, Observation and source-to-concept mapping table  
+BASIS	| | | 		Hardcore to ‘E’ (encounter-based)	| | | 		
 
 <h1>PCORnet Table: DIAGNOSIS </h1>
 Reading from OMOP tables: Condition_occurrence, and PCORnet table/view ENCOUNTER 
