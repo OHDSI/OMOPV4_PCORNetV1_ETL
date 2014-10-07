@@ -41,7 +41,7 @@ ADMIT_DATE|	Visit_occurrence|	visit_start_date||||
 ADMIT_TIME|	||||||					
 DISCHARGE_DATE|	Visit_occurrence|	visit_end_date	||||			
 DISCHARGE_TIME|	||||||					
-PROVIDERID|	Person|	provider_id	|	|||		Visit_occurrence and Person
+PROVIDERID|	condition_occurrence/procedure_occurrence|	associated_provider_id	|	select the most frequent provider_id|||		Visit_occurrence and condition_occurrence/procedure_occurrence
 FACILITY_LOCATION|	Location|	Zip	|	|||		Visit_occurrence and Care_Site, Care_Site and Location
 ENC_TYPE|	Visit_occurrence|	Place_of_service_concept_id	||	‘Encounter_type’|	|	Visit_occurrence and source-to-concept mapping table (1st instance)
 FACILITY_ID	|Visit_occurrence	|care_site_id		||||		
@@ -50,11 +50,11 @@ DISCHARGE_STATUS|	Observation(2nd instance)|	value_as_concept_id	|	|‘Discharge
 DRG|	Concept|	Concept_code|	||		3040646	|Visit_occurrence and Observation (3rd  instance), Observation (3rd instance) and Concept
 DRG_TYPE|	||		Corresponds to the field DRG; ‘01’ if concept_class is ‘DRG’, else ‘02’	|||		
 ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	|	|'Admitting source'|	4145666	|Visit_occurrence and Observation (4th instance), Observation (4th instance) and source-to-concept mapping table  (4th instance)
-RAW_ENC_TYPE|	Visit_occurrence|	place_of_service_concept_id|	Corresponds to the field DISCHARGE_DISPOSITION|||			
-RAW_DISCHARGE_DISPOSITION|	Observation (1st instance)|	value_as_concept_id	|Corresponds to the field DISCHARGE_STATUS|||			
-RAW_DISCHARGE_STATUS|	Observation (2nd instance)|	value_as_concept_id|	Corresponds to the field DRG_TYPE	|||		
-RAW_DRG_TYPE|||			Corresponds to the field ADMITTING_SOURCE	|||		
-RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	||||			
+RAW_ENC_TYPE|	Visit_occurrence|	place_of_service_concept_id|	Corresponds to the field ENC_TYPE|||			
+RAW_DISCHARGE_DISPOSITION|	Observation (1st instance)|	value_as_concept_id	|Corresponds to the field DISCHARGE_DISPOSITION|||			
+RAW_DISCHARGE_STATUS|	Observation (2nd instance)|	value_as_concept_id|Corresponds to the field DISCHARGE_STATUS	|||		
+RAW_DRG_TYPE|||	Corresponds to the field DRG_TYPE			|||		
+RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	|Corresponds to the field ADMITTING_SOURCE	|||			
 
 <h1>PCORnet Table: ENROLLMENT </h1>
 Reading from OMOP tables: Observation_period, and Observation
