@@ -33,6 +33,8 @@ RAW_RACE|	person|	race_source_value		||||
 <h1>PCORnet Table: ENCOUNTER </h1>
 Reading from: OMOP tables, Visit_Occurrence, Person, Location, Observation, Concept 
 
+**Assumptions:**  The provider_id field is left null as the sites do not include this information in the ETL. In the future, we may select the most frequent provider_id from the condition_occurrence/procedure_occurrence/observation tables. 
+
 Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
 ------------ | -------------|-------------|-------------|-------------|-------------|-------------
 PATID|	Visit_occurrence|	person_id	||||			
@@ -41,7 +43,7 @@ ADMIT_DATE|	Visit_occurrence|	visit_start_date||||
 ADMIT_TIME|	||||||					
 DISCHARGE_DATE|	Visit_occurrence|	visit_end_date	||||			
 DISCHARGE_TIME|	||||||					
-PROVIDERID|	condition_occurrence/procedure_occurrence|	associated_provider_id	|	select the most frequent provider_id|||		Visit_occurrence and condition_occurrence/procedure_occurrence
+PROVIDERID|	|		|	|||
 FACILITY_LOCATION|	Location|	Zip	|	|||		Visit_occurrence and Care_Site, Care_Site and Location
 ENC_TYPE|	Visit_occurrence|	Place_of_service_concept_id	||	‘Encounter_type’|	|	Visit_occurrence and source-to-concept mapping table (1st instance)
 FACILITY_ID	|Visit_occurrence	|care_site_id		||||		
