@@ -62,7 +62,7 @@ select distinct
 	null as admit_time,
 	cast(date_part('year', visit_end_date) as text)||'-'||lpad(cast(date_part('month', visit_end_date) as text),2,'0')||'-'||lpad(cast(date_part('day', visit_end_date) as text),2,'0') as discharge_date,
 	null as discharge_time,
-	p.provider_id as providerid,
+	null as providerid,
 	left(l.zip,3) as facility_location,
 	coalesce(m1.target_concept,'OT') as enc_type,
 	v.care_site_id as facilityid,
@@ -80,7 +80,7 @@ select distinct
 	o4.value_as_concept_id as raw_admitting_source
 from
 	omop.visit_occurrence v
-	left join omop.person p on v.person_id = p.person_id
+	--left join omop.person p on v.person_id = p.person_id
 	left join omop.care_site c on v.care_site_id = c.care_site_id
 	left join omop.location l on c.location_id = l.location_id
 	left join omop.observation o1 on v.person_id = o1.person_id and o1.observation_concept_id = 44813951
