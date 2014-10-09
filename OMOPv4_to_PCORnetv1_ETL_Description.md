@@ -78,7 +78,7 @@ Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*
 ------------ | -------------|-------------|-------------|-------------|-------------|-------------
 PATID|	Condition_occurrence	|Person_id|	|||
 ENCOUNTERID	|Condition_occurrence	|Visit_occurrence_id	||||
-ENC_TYPE|	ENCOUNTER	|ENC_TYPE	||||
+ENC_TYPE|	ENCOUNTER	|ENC_TYPE	||||Condition_occurrence and ENCOUNTER
 ADMIT_DATE|	ENCOUNTER|	ADMIT_DATE	||||
 PROVIDERID|	ENCOUNTER	|PROVIDERID	||||
 DX	|Condition_occurrence|	condition_concept_id	||||
