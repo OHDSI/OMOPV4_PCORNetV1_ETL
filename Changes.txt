@@ -1,3 +1,9 @@
+Changes in R3.4
+
+- add INSERT command Ñ Not yet
+Ñ Change standard_concept_ID from 0 to #### for Unknown cases Ñ Not yet
+Ñ use value_as_text field to populate DRG Ñ Not yet
+
 Changes in R3.1
 
 - Populate BP position
