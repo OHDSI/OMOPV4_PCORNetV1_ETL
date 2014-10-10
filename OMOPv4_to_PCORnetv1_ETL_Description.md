@@ -33,6 +33,8 @@ RAW_RACE|	person|	race_source_value		||||
 <h1>PCORnet Table: ENCOUNTER </h1>
 Reading from: OMOP tables, Visit_Occurrence, Person, Location, Observation, Concept 
 
+**Assumptions:**  The provider_id field is left null as the sites do not include this information in the ETL. In the future, we may select the most frequent provider_id from the condition_occurrence/procedure_occurrence/observation tables. 
+
 Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
 ------------ | -------------|-------------|-------------|-------------|-------------|-------------
 PATID|	Visit_occurrence|	person_id	||||			
@@ -41,7 +43,7 @@ ADMIT_DATE|	Visit_occurrence|	visit_start_date||||
 ADMIT_TIME|	||||||					
 DISCHARGE_DATE|	Visit_occurrence|	visit_end_date	||||			
 DISCHARGE_TIME|	||||||					
-PROVIDERID|	Person|	provider_id	|	|||		Visit_occurrence and Person
+PROVIDERID|	|		|	|||
 FACILITY_LOCATION|	Location|	Zip	|	|||		Visit_occurrence and Care_Site, Care_Site and Location
 ENC_TYPE|	Visit_occurrence|	Place_of_service_concept_id	||	‘Encounter_type’|	|	Visit_occurrence and source-to-concept mapping table (1st instance)
 FACILITY_ID	|Visit_occurrence	|care_site_id		||||		
@@ -50,11 +52,11 @@ DISCHARGE_STATUS|	Observation(2nd instance)|	value_as_concept_id	|	|‘Discharge
 DRG|	Concept|	Concept_code|	||		3040646	|Visit_occurrence and Observation (3rd  instance), Observation (3rd instance) and Concept
 DRG_TYPE|	||		Corresponds to the field DRG; ‘01’ if concept_class is ‘DRG’, else ‘02’	|||		
 ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	|	|'Admitting source'|	4145666	|Visit_occurrence and Observation (4th instance), Observation (4th instance) and source-to-concept mapping table  (4th instance)
-RAW_ENC_TYPE|	Visit_occurrence|	place_of_service_concept_id|	Corresponds to the field DISCHARGE_DISPOSITION|||			
-RAW_DISCHARGE_DISPOSITION|	Observation (1st instance)|	value_as_concept_id	|Corresponds to the field DISCHARGE_STATUS|||			
-RAW_DISCHARGE_STATUS|	Observation (2nd instance)|	value_as_concept_id|	Corresponds to the field DRG_TYPE	|||		
-RAW_DRG_TYPE|||			Corresponds to the field ADMITTING_SOURCE	|||		
-RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	||||			
+RAW_ENC_TYPE|	Visit_occurrence|	place_of_service_concept_id|	Corresponds to the field ENC_TYPE|||			
+RAW_DISCHARGE_DISPOSITION|	Observation (1st instance)|	value_as_concept_id	|Corresponds to the field DISCHARGE_DISPOSITION|||			
+RAW_DISCHARGE_STATUS|	Observation (2nd instance)|	value_as_concept_id|Corresponds to the field DISCHARGE_STATUS	|||		
+RAW_DRG_TYPE|||	Corresponds to the field DRG_TYPE			|||		
+RAW_ADMITTING_SOURCE|	Observation (4th instance)|	value_as_concept_id	|Corresponds to the field ADMITTING_SOURCE	|||			
 
 <h1>PCORnet Table: ENROLLMENT </h1>
 Reading from OMOP tables: Observation_period, and Observation
@@ -76,7 +78,7 @@ Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*
 ------------ | -------------|-------------|-------------|-------------|-------------|-------------
 PATID|	Condition_occurrence	|Person_id|	|||
 ENCOUNTERID	|Condition_occurrence	|Visit_occurrence_id	||||
-ENC_TYPE|	ENCOUNTER	|ENC_TYPE	||||
+ENC_TYPE|	ENCOUNTER	|ENC_TYPE	||||Condition_occurrence and ENCOUNTER
 ADMIT_DATE|	ENCOUNTER|	ADMIT_DATE	||||
 PROVIDERID|	ENCOUNTER	|PROVIDERID	||||
 DX	|Condition_occurrence|	condition_concept_id	||||
