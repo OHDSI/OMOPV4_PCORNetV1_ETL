@@ -1,5 +1,8 @@
-﻿
 
+<<<<<<< HEAD
+—- TODO: Add INSERTs
+
+=======
 -- Person -> Demographic WITHOUT Biobank_flag
 insert into pcornet.demographic
 select distinct 
@@ -18,6 +21,7 @@ from
 	left join cz.cz_omop_pcornet_concept_map m1 on case when p.gender_concept_id is null AND m1.source_concept_id is null then true else p.gender_concept_id = m1.source_concept_id end and m1.source_concept_class='Gender'
 	left join cz.cz_omop_pcornet_concept_map m2 on case when p.ethnicity_concept_id is null AND m2.source_concept_id is null then true else p.ethnicity_concept_id = m2.source_concept_id end and m2.source_concept_class='Hispanic'
 	left join cz.cz_omop_pcornet_concept_map m3 on case when p.race_concept_id is null AND m3.source_concept_id is null then true else p.race_concept_id = m3.source_concept_id end and m3.source_concept_class = 'Race';
+>>>>>>> FETCH_HEAD
 
 -- Person -> Demographic WITH Biobank_flag
 insert into pcornet.demographic
@@ -201,3 +205,4 @@ from
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
 	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND ob.observation_date = ob_bp.observation_date AND ob.observation_time = ob.observation_time
 	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
+	AND coalesce(ob_ht.value_as_number, ob_wt.value_as_number, ob_dia.value_as_number, ob_sys.value_as_number, ob_bmi.value_as_number, coalesce(ob_bp.target_concept,'OT')) is not null;
