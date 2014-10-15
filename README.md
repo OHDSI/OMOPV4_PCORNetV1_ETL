@@ -18,6 +18,9 @@ This document describes all the assumptions made for the transformation process.
 ### OMOPv4_to_PCORnetv1_ETL_Description.md
 This document describes the ETL process to populate each field of the PCORnet model. 
 
+### OMOPv4_to_PCORnetv1_ETL_Description.pdf
+The pdf version of the ETL process description document
+
 ### cz_omop_pcornet_concept_map_ddl.sql
 This document contains the DDL script to create the source-to-concept mapping table (i.e. OMOP->PCORnet vocabulary mapping) into database. In addition, each site is required to manually load the [omop_pcornet_mappings.csv file] (https://github.com/OHDSI/OMOPV4_PCORNetV1_ETL/blob/master/omop_pcornet_mappings.csv) into this table. The PostgreSQL setting for importing the file include: format=csv, header=check.
 
