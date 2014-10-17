@@ -205,4 +205,5 @@ from
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
 	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND ob.observation_date = ob_bp.observation_date AND ob.observation_time = ob.observation_time
 	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
-	AND coalesce(ob_ht.value_as_number, ob_wt.value_as_number, ob_dia.value_as_number, ob_sys.value_as_number, ob_bmi.value_as_number, coalesce(ob_bp.target_concept,'OT')) is not null;
+	AND coalesce(ob_ht.value_as_number, ob_wt.value_as_number, ob_dia.value_as_number, 
+	ob_sys.value_as_number, ob_bmi.value_as_number) is not null;

@@ -107,6 +107,7 @@ RAW_PX_TYPE	|		||||||
 
 <h1>PCORnet Table: VITAL </h1>
 Reading from OMOP table: Observation  
+Notes: The timezone information associated with observation_time is lost during this transformation.  The resultant table cannot distinguish between the systolic/diastolic values for two differernt blood pressure position recorded at the same time. 
 
 Destination Field (PCORnet)| Source table (OMOP)|Source Field(s)(OMOP)|*General*|*Concept Class for mapping to PCORnet vocabulary*|*OMOP Concept_ID for observations*|*Required Join*
 ------------ | -------------|-------------|-------------|-------------|-------------|-------------
