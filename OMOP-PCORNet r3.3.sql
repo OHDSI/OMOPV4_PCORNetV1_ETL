@@ -1,10 +1,6 @@
-
-<<<<<<< HEAD
-—- TODO: Add INSERTs
-
-=======
+﻿=======
 -- Person -> Demographic WITHOUT Biobank_flag
-insert into pcornet.demographic
+insert into pcornet.demographic (patid, birth_date, birth_time, sex, hispanic, race, biobank_flag, raw_sex, raw_hispanic, raw_race)
 select distinct 
 	cast(p.person_id as text) as pat_id,
 	cast(year_of_birth as text)||(case when month_of_birth is null OR day_of_birth is null then '' else '-'||lpad(cast(month_of_birth as text),2,'0')||'-'||lpad(cast(day_of_birth as text),2,'0') end) as birth_date,	
@@ -24,7 +20,7 @@ from
 >>>>>>> FETCH_HEAD
 
 -- Person -> Demographic WITH Biobank_flag
-insert into pcornet.demographic
+insert into pcornet.demographic (patid, birth_date, birth_time, sex, hispanic, race, biobank_flag, raw_sex, raw_hispanic, raw_race)
 select distinct 
 	cast(p.person_id as text) as pat_id,
 	cast(year_of_birth as text)||(case when month_of_birth is null OR day_of_birth is null then '' else '-'||lpad(cast(month_of_birth as text),2,'0')||'-'||lpad(cast(day_of_birth as text),2,'0') end) as birth_date,	
@@ -45,7 +41,7 @@ from
 	left join cz.cz_omop_pcornet_concept_map m4 on case when o.value_as_concept_id is null AND m4.value_as_concept_id is null then true else o.value_as_concept_id=m4.value_as_concept_id end and m4.source_concept_class = 'Biobank flag'
 
 -- Observation_period -> Enrollment
-insert into pcornet.enrollment
+insert into pcornet.enrollment (patid, enr_start_date, enr_end_date, chart, enr_basis)
 select distinct 
 	cast(op.person_id as text) as pat_id,
 	cast(date_part('year', observation_period_start_date) as text)||'-'||lpad(cast(date_part('month', observation_period_start_date) as text),2,'0')||'-'||lpad(cast(date_part('day', observation_period_start_date) as text),2,'0') as enr_start_date,
@@ -58,7 +54,12 @@ from
 	left join cz.cz_omop_pcornet_concept_map m1 on case when o.value_as_concept_id is null AND m1.value_as_concept_id is null then true else o.value_as_concept_id = m1.value_as_concept_id end and m1.source_concept_class = 'Chart availability'
 
 -- Visit occurrence -> encounter
-insert into pcornet.encounter
+insert into pcornet.encounter (
+            patid, encounterid, admit_date, admit_time, discharge_date, discharge_time, 
+            providerid, facility_location, enc_type, facilityid, discharge_disposition, 
+            discharge_status, drg, drg_type, admitting_source, raw_enc_type, 
+            raw_discharge_disposition, raw_discharge_status, raw_drg_type, 
+            raw_admitting_source)
 select distinct 
 	cast(v.person_id as text) as pat_id,
 	cast(v.visit_occurrence_id as text) as encounterid,
@@ -74,8 +75,9 @@ select distinct
 	coalesce(m3.target_concept,'OT') as discharge_status,
 	--case when coalesce(m1.target_concept,'OT') in ('AV','OA') then null else case when o2.observation_source_value~'^[0-9]{0,3}$' then lpad(o2.observation_source_value,3,'0') else 'OT' end end as drg,
 	--case when coalesce(m1.target_concept,'OT') in ('AV','OA') then null else case when visit_start_date<'2007-10-01' then '01' else '02' end end as drg_type,
-	case when drg.concept_id is null then 'OT' else drg.concept_code end as drg,
-	case when drg.concept_class='DRG' then '01' else '02' end as drg_type,
+	--case when drg.concept_id is null then 'OT' else drg.concept_code end as drg,
+	case when coalesce(m1.target_concept,'OT') in ('AV','OA') then null else o2.concept_code end as drg,
+	case when coalesce(m1.target_concept,'OT') in ('AV','OA') then null else case when visit_start_date<'2007-10-01' then '01' else '02' end end as drg_type,
 	coalesce(m4.target_concept,'OT') as admitting_source,
 	v.place_of_service_concept_id as raw_enc_type,
 	o1.value_as_concept_id as raw_discharge_disposition,
@@ -89,7 +91,7 @@ from
 	left join omop.location l on c.location_id = l.location_id
 	left join omop.observation o1 on v.person_id = o1.person_id and o1.observation_concept_id = 44813951
 	left join omop.observation o2 on v.person_id = o2.person_id and o2.observation_concept_id = 3040464
-	left join rz.concept drg on drg.concept_id = o2.value_as_concept_id
+	--left join omop.observation drg on drg.concept_id = o2.value_as_concept_id
 	left join omop.observation o3 on v.person_id = o3.person_id and o3.observation_concept_id = 4137274
 	left join omop.observation o4 on v.person_id = o4.person_id and o4.observation_concept_id = 4145666
 	left join cz.cz_omop_pcornet_concept_map m1 on case when v.place_of_service_concept_id is null AND m1.source_concept_id is null then true else v.place_of_service_concept_id = m1.source_concept_id end and m1.source_concept_class='Encounter type'
@@ -98,7 +100,9 @@ from
 	left join cz.cz_omop_pcornet_concept_map m4 on case when o4.value_as_concept_id is null AND m4.value_as_concept_id is null then true else o4.value_as_concept_id = m4.value_as_concept_id end and m4.source_concept_class='Admitting source'
 
 -- condition_occurrence --> Diagnosis
-insert into pcornet.diagnosis
+insert into pcornet.diagnosis(
+            patid, encounterid, enc_type, admit_date, providerid, dx, dx_type, 
+            dx_source, pdx, raw_dx, raw_dx_type, raw_dx_source, raw_pdx)
 select distinct 
 	cast(person_id as text) as patid,
 	cast(visit_occurrence_id as text) encounterid,
@@ -118,7 +122,9 @@ from
 	join pcornet.encounter enc on cast(co.visit_occurrence_id as text)=enc.encounterid; 
 
 -- procedure_occurrence -> procedure
-insert into pcornet.procedure
+insert into pcornet.procedure(
+            patid, encounterid, enc_type, admit_date, providerid, px, px_type, 
+            raw_px, raw_px_type)
 select distinct 
 	cast(person_id as text) as patid,
 	cast(visit_occurrence_id as text) as encounterid,
@@ -134,7 +140,10 @@ from
 	join pcornet.encounter enc on cast(po.visit_occurrence_id as text)=enc.encounterid;
 
 -- observation --> vital WITHOUT Observation time
-insert into pcornet.vital
+insert into pcornet.vital(
+            patid, encounterid, measure_date, measure_time, vital_source, 
+            ht, wt, diastolic, systolic, original_bmi, bp_position, raw_vital_source, 
+            raw_diastolic, raw_systolic, raw_bp_position)
 select distinct 
 	cast(ob.person_id as text) as patid,
 	cast(ob.visit_occurrence_id as text) as encounterid,
@@ -166,12 +175,15 @@ from
 	left join 
 	(select distinct visit_occurrence_id, observation_date, observation_time, target_concept from 
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
-	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND ob.observation_date = ob_bp.observation_date
+	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND ob.observation_date = ob_bp.observation_date AND trim(both ' ' from ob_bp.value_as_string) = ob_sys.observation_id
 	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
 
 
 -- observation --> vital WITH Observation time
-insert into pcornet.vital
+insert into pcornet.vital(
+            patid, encounterid, measure_date, measure_time, vital_source, 
+            ht, wt, diastolic, systolic, original_bmi, bp_position, raw_vital_source, 
+            raw_diastolic, raw_systolic, raw_bp_position)
 select distinct 
 	cast(ob.person_id as text) as patid,
 	cast(ob.visit_occurrence_id as text) as encounterid,
@@ -203,7 +215,7 @@ from
 	left join 
 	(select distinct visit_occurrence_id, observation_date, observation_time, target_concept from 
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
-	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND ob.observation_date = ob_bp.observation_date AND ob.observation_time = ob.observation_time
+	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND ob.observation_date = ob_bp.observation_date AND ob.observation_time = ob.observation_time AND trim(both ' ' from ob_bp.value_as_string) = ob_sys.observation_id
 	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
 	AND coalesce(ob_ht.value_as_number, ob_wt.value_as_number, ob_dia.value_as_number, 
 	ob_sys.value_as_number, ob_bmi.value_as_number) is not null;
