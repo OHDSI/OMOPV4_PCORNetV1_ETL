@@ -173,7 +173,7 @@ from
 	left join omop.observation ob_bmi on ob.visit_occurrence_id = ob_bmi.visit_occurrence_id 
 		and ob.observation_date = ob_bmi.observation_date and ob_bmi.observation_concept_id='3038553'
 	left join 
-	(select distinct visit_occurrence_id, observation_date, observation_time, target_concept from 
+	(select distinct visit_occurrence_id, observation_date, observation_time, target_concept, ob_sub.value_as_string from 
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
 	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND trim(both ' ' from ob_bp.value_as_string) = trim(both ' ' from ob_sys.value_as_string)	
 	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
