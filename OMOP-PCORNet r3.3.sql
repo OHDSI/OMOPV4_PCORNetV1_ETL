@@ -163,20 +163,20 @@ select distinct
 from
 	omop.observation ob 
 	left join omop.observation ob_ht on ob.visit_occurrence_id = ob_ht.visit_occurrence_id 
-		and ob.observation_date = ob_ht.observation_date and ob_ht.observation_concept_id='3036277'
+		and ob.observation_date = ob_ht.observation_date and ob_ht.observation_concept_id='3023540'
 	left join omop.observation ob_wt on ob.visit_occurrence_id = ob_wt.visit_occurrence_id 
-		and ob.observation_date = ob_wt.observation_date and ob_wt.observation_concept_id='3025315'
+		and ob.observation_date = ob_wt.observation_date and ob_wt.observation_concept_id='3013762'
 	left join omop.observation ob_sys on ob.visit_occurrence_id = ob_sys.visit_occurrence_id 
-		and ob.observation_date = ob_sys.observation_date and ob_sys.observation_concept_id='3004249'
+		and ob.observation_date = ob_sys.observation_date and ob_sys.observation_concept_id IN ('3018586','3035856','3009395','3004249')
 	left join omop.observation ob_dia on ob.visit_occurrence_id = ob_dia.visit_occurrence_id 
-		and trim(both ' ' from ob_sys.value_as_text) = trim(both ' ' from ob_dia.value_as_text) and ob_dia.observation_concept_id='3012888' 
+		and ob_sys.value_as_concept_id = ob_dia.value_as_concept_id and ob_dia.observation_concept_id IN ('3034703','3019962','3013940','3012888') 
 	left join omop.observation ob_bmi on ob.visit_occurrence_id = ob_bmi.visit_occurrence_id 
 		and ob.observation_date = ob_bmi.observation_date and ob_bmi.observation_concept_id='3038553'
 	left join 
 	(select distinct visit_occurrence_id, observation_date, observation_time, target_concept, ob_sub.value_as_string from 
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
 	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND trim(both ' ' from ob_bp.value_as_string) = trim(both ' ' from ob_sys.value_as_string)	
-	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
+	where ob.observation_concept_id IN ('3023540','3013762','3034703','3019962','3013940','3012888','3018586','3035856','3009395','3004249','3038553')
 	AND coalesce(ob_ht.value_as_number, ob_wt.value_as_number, ob_dia.value_as_number, 
 	ob_sys.value_as_number, ob_bmi.value_as_number) is not null;
 
@@ -204,19 +204,19 @@ select distinct
 from
 	omop.observation ob 
 	left join omop.observation ob_ht on ob.visit_occurrence_id = ob_ht.visit_occurrence_id 
-		and ob.observation_date = ob_ht.observation_date and ob.observation_time = ob_ht.observation_time and ob_ht.observation_concept_id='3036277'
+		and ob.observation_date = ob_ht.observation_date and ob.observation_time = ob_ht.observation_time and ob_ht.observation_concept_id='3023540'
 	left join omop.observation ob_wt on ob.visit_occurrence_id = ob_wt.visit_occurrence_id 
-		and ob.observation_date = ob_wt.observation_date and ob.observation_time = ob_wt.observation_time and ob_wt.observation_concept_id='3025315'
+		and ob.observation_date = ob_wt.observation_date and ob.observation_time = ob_wt.observation_time and ob_wt.observation_concept_id='3013762'
 	left join omop.observation ob_sys on ob.visit_occurrence_id = ob_sys.visit_occurrence_id 
-		and ob.observation_date = ob_sys.observation_date and ob.observation_time = ob_sys.observation_time and ob_sys.observation_concept_id='3004249'
+		and ob.observation_date = ob_sys.observation_date and ob.observation_time = ob_sys.observation_time and ob_sys.observation_concept_id IN ('3018586','3035856','3009395','3004249')
 	left join omop.observation ob_dia on ob.visit_occurrence_id = ob_dia.visit_occurrence_id 
-		and trim(both ' ' from ob_sys.value_as_text) = trim(both ' ' from ob_dia.value_as_text) and ob_dia.observation_concept_id='3012888' 
+		and ob_sys.value_as_concept_id = ob_dia.value_as_concept_id and ob_dia.observation_concept_id IN ('3034703','3019962','3013940','3012888') 
 	left join omop.observation ob_bmi on ob.visit_occurrence_id = ob_bmi.visit_occurrence_id 
 		and ob.observation_date = ob_bmi.observation_date and ob.observation_time = ob_bmi.observation_time and ob_bmi.observation_concept_id='3038553'
 	left join 
 	(select distinct visit_occurrence_id, observation_date, observation_time, target_concept from 
 	omop.observation ob_sub inner join cz.cz_omop_pcornet_concept_map m on ob_sub.observation_concept_id = m.source_concept_id AND m.source_concept_class='BP Position') ob_bp
 	on ob.visit_occurrence_id = ob_bp.visit_occurrence_id AND trim(both ' ' from ob_bp.value_as_string) = trim(both ' ' from ob_sys.value_as_string)
-	where ob.observation_concept_id IN ('3036277','3025315','3012888','3004249','3038553')
+	where ob.observation_concept_id IN ('3023540','3013762','3034703','3019962','3013940','3012888','3018586','3035856','3009395','3004249','3038553')
 	AND coalesce(ob_ht.value_as_number, ob_wt.value_as_number, ob_dia.value_as_number, 
 	ob_sys.value_as_number, ob_bmi.value_as_number) is not null;
